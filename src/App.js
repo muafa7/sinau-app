@@ -13,7 +13,11 @@ import {Navbar,
         InputStudentData, 
         InputTeacherData,
         ListStudent,
-        ListTeacher } from './components';
+        ListTeacher,
+        TambahNilai,
+        EditNilai,
+        TabelNilaiSiswa,
+        TabelNilaiGuru} from './components';
 
 
 import { AiFillHome } from 'react-icons/ai';
@@ -42,13 +46,17 @@ function App() {
     <Router>
     <Navbar navs={nav}/>
       <Routes>
-        <Route path="/" element={<LandingPage/>} />
+       <Route path="/" element={<LandingPage/>} />
         <Route path="/inputstudentdata" element={<InputStudentData />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/inputteacherdata" element={<InputTeacherData />} />
         <Route path="/liststudent" element={<ListStudent />} />
         <Route path="/listteacher" element={<ListTeacher />} />
+        <Route path="/tambahnilai" element={<TambahNilai />} />
+        <Route path="/tabelnilaiguru" element={<TabelNilaiGuru />} />
+        <Route path="/tabelnilaisiswa" element={<TabelNilaiSiswa />} />
+        <Route path="/editnilai" element={<EditNilai />} />
       </Routes>
     </Router>
   );
