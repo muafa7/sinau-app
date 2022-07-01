@@ -1,0 +1,35 @@
+import React from 'react'
+
+export default function TabelNilaiSiswa() {
+  return (
+    <div className="px-20">
+       <table className="w-full  pt-8 lg:mx-auto table-fixed border-slate border border-slate-400 mb-11 ">
+    <thead className="bg-blue-500 border-b-2 border-blue-500">
+      <tr>
+        <th className="border border-slate-300 ">Mata Pelajaran</th>
+        <th className="border border-slate-300">UH1</th>
+        <th className="border border-slate-300">UH2</th>
+        <th className="border border-slate-300">UH3</th>
+        <th className="border border-slate-300">UH4</th>
+        <th className="border border-slate-300">UTS</th>
+        <th className="border border-slate-300">UAS</th>
+      </tr>
+    </thead>
+    <tbody className="bg-white">
+      <tr>
+        <td className="text-center border border-slate-300">Matematika</td>
+        <td className="text-center border border-slate-300">85</td>
+        <td className="text-center border border-slate-300">96</td>
+        <td className="text-center border border-slate-300">96</td>
+        <td className="text-center border border-slate-300">96</td>
+        <td className="text-center border border-slate-300">96</td>
+        <td className="text-center border border-slate-300">96</td>
+      </tr>
+     
+    </tbody>
+  </table>
+
+    </div>
+  )
+}
+
