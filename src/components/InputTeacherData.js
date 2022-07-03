@@ -1,21 +1,35 @@
-import React from 'react';
+import React, {useState,
+                useEffect} from 'react';
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import validationSchema from '../utils/validation'
+import ProgressIdb from '../data/idb';
+import CONFIG from '../global/config';
 
 export default function InputTeacherData() {
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors }
-      } = useForm({
-        resolver: yupResolver(validationSchema)
-      });
+    const {URL_SUBJECT, URL_TEACHER} = CONFIG;
+    const [subject, setSubject] = useState([])
+    const { register, handleSubmit } = useForm();
 
-    const onSubmit = data => {
-    console.log(JSON.stringify(data, null, 2));
-    };
+    useEffect(() => {
+        const getData = async () => {
+            const response = await ProgressIdb.getToken();
+            const token = await response[0].token;
+            const result = await axios.get(URL_SUBJECT,
+                {headers: {Authorization : token}});
+                setSubject(result.data.data);
+                console.log(result.data.data)
+        };
+      getData();
+    }, [])
+    
+    const onSubmit = (data) => {
+        axios
+            .post(URL_REGISTER, {
+              ...data, type : 1})
+            .then(response => {window.location.href = '/login'})
+            .catch(errors => {setError(errors.response.data.error.details.errors[0].message)});
+      }
+      
   return (
     <div className="relative mx-5 my-2 max-w-lg pt-8 lg:mx-auto">
             <h1 className="text-3xl font-bold text-center mb-12 md:text-5xl">Input Teacher Data</h1>
@@ -26,7 +40,7 @@ export default function InputTeacherData() {
                             <label className="block text-sm font-normal mb-1 md:mb-2 md:text-xl" for="Name">
                                 Name
                             </label>
-                            <input
+                            <input {...register("nama_guru")}
                             className="appearance-none border rounded md:text-base lg:text-xl border-gray-400 w-full py-3 px-2 text-gray-700 leading-tight
                                             focus:outline-none" id="Name" type="text" placeholder="Name" />
                         </div>
@@ -34,7 +48,14 @@ export default function InputTeacherData() {
                             <label className="block text-sm font-normal mb-1 md:mb-2 md:text-xl" for="nip">
                                 NIP
                             </label>
-                            <input
+                            <input {...register("nip")}
+                            className="appearance-none border rounded md:text-base lg:text-xl border-gray-400 w-full py-3 px-2 text-gray-700 leading-tight focus:outline-none" id="nip" type="text" placeholder="NIP" />
+                        </div>
+                        <div className="mb-4 md:mb-8">
+                            <label className="block text-sm font-normal mb-1 md:mb-2 md:text-xl" for="contact">
+                                Contact
+                            </label>
+                            <input {...register("hp_guru")}
                             className="appearance-none border rounded md:text-base lg:text-xl border-gray-400 w-full py-3 px-2 text-gray-700 leading-tight focus:outline-none" id="nip" type="text" placeholder="NIP" />
                         </div>
                         <div className="mb-4 md:mb-8">
@@ -46,22 +67,22 @@ export default function InputTeacherData() {
                         </div>
                         <div className="mb-4 md:mb-8">
                             <label className="block text-sm font-normal mb-1 md:mb-2 md:text-xl">
-                                Jenis Kelamin
+                                Gender
                             </label>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="rounded border border-gray-400">
                                     <input
-                                    id="male" type="radio" name="sex" value="Pria" className="hidden" />
+                                    id="male" type="radio" name="sex" value="laki-laki" className="hidden" />
                                     <label for="male" className="flex items-center cursor-pointer text-sm py-3 px-2">
                                     <span className="w-3 h-3 inline-block mr-2 md:text-xl rounded-full border border-grey bg-gray-400 shadow-inset flex-no-shrink"></span>
-                                    Pria</label>
+                                    Male</label>
                                 </div>
                                 <div className="rounded border border-gray-400">
-                                    <input
-                                    id="female" type="radio" name="sex" value="Wanita" className="hidden" />
+                                    <input {...register("jenis_kelamin")}
+                                    id="female" type="radio" name="sex" value="perempuan" className="hidden" />
                                     <label for="female" className="flex items-center cursor-pointer text-sm py-3 px-2">
                                     <span className="w-3 h-3 inline-block mr-2 md:text-xl rounded-full border border-grey bg-gray-400 shadow-inset flex-no-shrink"></span>
-                                    Wanita</label>
+                                    Female</label>
                                 </div>
                             </div>
                         </div>
@@ -69,8 +90,31 @@ export default function InputTeacherData() {
                             <label className="block text-sm font-normal mb-1 md:mb-2 md:text-xl" for="address">
                                 Address
                             </label>
-                            <input
+                            <input {...register("alamat_guru")}
                             className="appearance-none border rounded md:text-base lg:text-xl border-gray-400 w-full py-3 px-2 text-gray-700 leading-tight focus:outline-none" id="address" type="text" placeholder="Address" />
+                        </div>
+                        <div className="mb-4 md:mb-8">
+                            <label className="block text-sm font-normal mb-1 md:mb-2 md:text-xl">
+                                Subject
+                            </label>
+                            <div className="grid grid-cols-2 gap-4">
+                                {subject?.map((subject) => (
+                                <div className="rounded border border-gray-400">
+                                    <input {...register("matpel")}
+                                    id={subject.attributes.nama_matpel} type="radio" name="subject" value={subject.id} className="hidden" />
+                                    <label for={subject.attributes.nama_matpel} className="flex items-center cursor-pointer text-sm py-3 px-2">
+                                    <span className="w-3 h-3 inline-block mr-2 md:text-xl rounded-full border border-grey bg-gray-400 shadow-inset flex-no-shrink"></span>
+                                    {subject.attributes.nama_matpel}</label>
+                                </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="mb-4 md:mb-8">
+                            <label className="block text-sm font-normal mb-1 md:mb-2 md:text-xl" for="photo">
+                                Photo
+                            </label>
+                            <input {...register("gambar_guru")}
+                            className="appearance-none border rounded md:text-base lg:text-xl border-gray-400 w-full py-3 px-2 text-gray-700 leading-tight focus:outline-none" id="file" type="file" />
                         </div>
                     </div>
                 <div className="flex flex-col justify-center items-center">
