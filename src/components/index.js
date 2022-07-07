@@ -1,0 +1,10 @@
+export {default as Header} from './Header';
+export {default as InputStudentData} from './InputStudentData';
+export {default as InputTeacherData} from './InputTeacherData';
+export {default as ListStudent} from './ListStudent';
+export {default as ListTeacher} from './ListTeacher';
+export {default as TabelNilaiGuru} from './TabelNilaiGuru';
+export {default as TabelNilaiSiswa} from './TabelNilaiSiswa';
+export {default as TambahNilai} from './TambahNilai';
+export {default as EditNilai} from './EditNilai';
+export {default as Navbar} from './Navbar';
