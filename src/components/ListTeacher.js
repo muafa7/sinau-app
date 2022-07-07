@@ -1,38 +1,50 @@
-import React from 'react'
+import React, {
+    useState,
+    useEffect
+} from 'react';
+import axios from 'axios';
 
-
-function ListItem() {
-    return (<div class="max-w-sm rounded overflow-hidden shadow-lg">
-        <img class="w-full h-72 " src="./images/profile.jpg" alt="Mountain" />
-        <div class="px-6 py-4">
-            <div class="font-bold text-xl text-center mb-2">Muklis S.Pd</div>
-            <p class="text-gray-700 text-base text-center">
-                80974822
-            </p>
-        </div>
-        <div className="flex flex-col space-y-4 md:flex-row justify-center md:space-y-0 md:space-x-6 mt-4 px-2 pb-2">
-            <button className="bg-red-500 hover:bg-red-700 w-full md:max-w-xs text-center text-white font-normal py-2 px-4 rounded-md focus:outline-none focus:shadow-outline" type="button">
-                Delete
-            </button>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white w-full md:max-w-xs text-center font-normal py-2 px-4 rounded-md focus:outline-none focus:shadow-outline" type="button">
-                Edit
-            </button>
-        </div>
-    </div>);
-}
-
+import ProgressIdb from '../data/idb';
+import CONFIG from '../global/config';
 
 export default function ListTeacher() {
+    const [error, setError] = useState(null);
+    const [teacher, setTeacher] = useState([]);
+    const { URL_TEACHER } = CONFIG;
+
+
+
+    useEffect(() => {
+        const getData = async () => {
+            const response = await ProgressIdb.getToken();
+            const token = await response[0].token;
+            const result = await axios
+                .get(URL_TEACHER, { headers: { Authorization: token } })
+                .then(response => setTeacher(response.data))
+                .catch((error) => setError(error));
+        };
+        getData();
+    }, [])
+    console.log(teacher[0]?.matpel)
+    if (error) {
+        return <div>An error occured: {error.message}</div>;
+    }
     return (
         <div className='grid lg:grid-cols-5 gap-4 px-4 mb-3 md:px-24  md:pr-48'>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
+            {teacher?.map((teacher) => (
+                <div class="max-w-sm rounded overflow-hidden shadow-lg">
+                    <img class="w-full h-72 " src="./images/profile.png" alt="Profile" />
+                    <div class="px-6 py-4">
+                        <div class="font-bold text-xl text-center mb-2">{teacher.nama_guru}</div>
+                        <p class="text-gray-700 text-base text-center">
+                            {teacher.nip}
+                        </p>
+                        <p class="text-gray-700 text-base text-center">
+                            {teacher.matpel?.nama_matpel}
+                        </p>
+                    </div>
+                </div>
+            ))}
         </div>
     )
 }

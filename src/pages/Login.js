@@ -14,10 +14,9 @@ export default function Login() {
       axios
           .post(URL_LOGIN, data)
           .then(response => {
-            console.log((response.data.jwt))
-            
         ProgressIdb.addToken(`Bearer ${response.data.jwt}`);
         ProgressIdb.addUser(response.data.user);
+        window.location.href = '/'
           })
           .catch(errors => {
             if (errors.response.data.error.status === 400) {

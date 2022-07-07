@@ -1,41 +1,47 @@
-import React from 'react'
-
-
-function ListItem() {
-    return (<div class="max-w-sm rounded overflow-hidden shadow-lg">
-        <img class="w-full h-72 " src="./images/profile.jpg" alt="Mountain" />
-        <div class="px-6 py-4">
-            <div class="font-bold text-xl text-center mb-2">Muklis</div>
-            <p class="text-gray-700 text-base text-center">
-                80974822
-            </p>
-            <p class="text-gray-700 text-base text-center">
-                9F
-            </p>
-        </div>
-        <div className="flex flex-col space-y-4 md:flex-row justify-center md:space-y-0 md:space-x-6 mt-4 px-2 pb-2">
-            <button className="bg-red-500 hover:bg-red-700 w-full md:max-w-xs text-center text-white font-normal py-2 px-4 rounded-md focus:outline-none focus:shadow-outline" type="button">
-                Delete
-            </button>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white w-full md:max-w-xs text-center font-normal py-2 px-4 rounded-md focus:outline-none focus:shadow-outline" type="button">
-                Edit
-            </button>
-        </div>
-    </div>);
-}
+import React, {
+    useState,
+    useEffect
+} from 'react';
+import axios from 'axios';
+import ProgressIdb from '../data/idb';
+import CONFIG from '../global/config';
 
 
 export default function ListStudent() {
+    const [error, setError] = useState(null);
+    const [student, setStudent] = useState([]);
+    const { URL_STUDENT, } = CONFIG;
+    useEffect(() => {
+        const getData = async () => {
+            const response = await ProgressIdb.getToken();
+            const token = await response[0].token;
+            const result = await axios
+                .get(URL_STUDENT, { headers: { Authorization: token } })
+                .catch((error) => setError(error));
+            setStudent(result.data.data);
+            console.log(result.data.data)
+        };
+        getData();
+    }, [])
+    if (error) {
+        return <div>An error occured: {error.message}</div>;
+    }
     return (
         <div className='grid lg:grid-cols-5 gap-4 px-4 mb-3 md:px-24  md:pr-48'>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
+            {student?.map((student) => (
+                <div class="max-w-sm rounded overflow-hidden shadow-lg">
+                    <img class="w-full h-72 " src="./images/profile.png" alt="Profile" />
+                    <div class="px-6 py-4">
+                        <div class="font-bold text-xl text-center mb-2">{student.attributes.nama_siswa}</div>
+                        <p class="text-gray-700 text-base text-center">
+                            {student.attributes.nisn}
+                        </p>
+                        <p class="text-gray-700 text-base text-center">
+                            {student.attributes.kelas}
+                        </p>
+                    </div>
+                </div>
+            ))}
         </div>
     )
 }

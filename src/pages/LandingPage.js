@@ -19,11 +19,11 @@ function LandingPage() {
                           </h1>
                           <p className=" text-center">Dapatkan kemudahan dalam mengatur administrasi yang menarik</p>
                         <div className="flex flex-col space-y-4 md:flex-row justify-center md:space-y-0 md:space-x-6 mt-2 lg:mt-8">
-                            <NavLink end to="/login"
+                            <NavLink end to="/register"
                             className="bg-blue-700 hover:bg-blue-600 w-full md:max-w-xs text-center text-white font-normal py-2 px-4 rounded-md focus:outline-none focus:shadow-outline">
                                 Register
                             </NavLink>
-                            <NavLink end to="/register"
+                            <NavLink end to="/login"
                             className="border-2 border-black text-blue-700 w-full md:max-w-xs text-center font-normal py-2 px-4 rounded-md focus:outline-none focus:shadow-outline">
                                 Login
                             </NavLink>

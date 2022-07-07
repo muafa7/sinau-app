@@ -1,10 +1,14 @@
 import './App.css';
 
+import React from 'react';
+
 import {
   BrowserRouter as Router,
   Routes,
   Route
 } from 'react-router-dom';
+
+import ProgressIdb from './data/idb';
 
 import {Login,
         Register,
@@ -20,33 +24,61 @@ import {Navbar,
         TabelNilaiGuru} from './components';
 
 
-import { AiFillHome } from 'react-icons/ai';
-import { GiProgression } from 'react-icons/gi';
-import { VscAccount } from 'react-icons/vsc';
+import { AiOutlineUnorderedList } from 'react-icons/ai';
+import { FaChalkboardTeacher } from 'react-icons/fa';
+import { BsFillPeopleFill } from 'react-icons/bs';
 
-const nav = [{
-  path : '/',
-  icon : <AiFillHome className="text-white text-2xl lg:text-3xl" />,
-  name : 'Home'
+const nav = [
+{
+  path : '/inputteacherdata',
+  icon : <FaChalkboardTeacher className="text-white text-2xl lg:text-3xl" />,
+  name : 'Input Teacher Data'
 },
 {
-  path : '/progress',
-  icon : <GiProgression className="text-white text-2xl lg:text-3xl" />,
-  name : 'Progress'
+  path : '/inputstudentdata',
+  icon : <BsFillPeopleFill className="text-white text-2xl lg:text-3xl" />,
+  name : 'Input Student Data'
 },
 {
-  path : '/profile',
-  icon : <VscAccount className="text-white text-3xl" />,
-  name : 'Profile'
+  path : '/liststudent',
+  icon : <AiOutlineUnorderedList className="text-white text-2xl lg:text-3xl" />,
+  name : 'List Student'
+},
+{
+  path : '/listteacher',
+  icon : <AiOutlineUnorderedList className="text-white text-2xl lg:text-3xl" />,
+  name : 'List Teacher'
 },
 ]
 
-function App() {
+function App() {  
+  const [component, setComponent] = React.useState('');
+  const [isAdmin, setIsAdmin] = React.useState(false);
+  React.useEffect(() => {
+
+  const getData = async () => {
+  const role = await ProgressIdb.getUser();
+  if (role.length === 0) {
+    return setComponent(<LandingPage/>)
+  }
+  if (role[0].user?.type == "admin") {
+    setIsAdmin(true);
+    setComponent(<InputStudentData/>)
+  } else if (role[0].user?.type == "guru") {
+    setComponent(<TabelNilaiGuru/>)
+  } else if (role[0].user?.type == "siswa") {
+    setComponent(<TabelNilaiSiswa/>)
+  }
+
+}
+  getData();
+});
+
   return (
     <Router>
-    <Navbar navs={nav}/>
+    <Navbar navs={nav} isAdmin={isAdmin}/>
       <Routes>
-       <Route path="/" element={<LandingPage/>} />
+       <Route path="/" element={component} />
         <Route path="/inputstudentdata" element={<InputStudentData />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

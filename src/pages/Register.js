@@ -12,7 +12,8 @@ export default function Register() {
     const onSubmit = (data) => {
       axios
           .post(URL_REGISTER, {
-            ...data, type : 1})
+            ...data, role : 1, 
+            type : "admin"})
           .then(response => {window.location.href = '/login'})
           .catch(errors => {setError(errors.response.data.error.details.errors[0].message)});
     }

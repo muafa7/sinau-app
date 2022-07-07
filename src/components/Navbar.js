@@ -1,12 +1,13 @@
 import React from "react";
 import { NavLink } from 'react-router-dom';
+import ProgressIdb from "../data/idb";
 
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import { HiOutlineLogout } from 'react-icons/hi';
 
 
 
-export default function Navbar({navs}) {
+export default function Navbar({navs, isAdmin}) {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
 
   
@@ -15,7 +16,7 @@ export default function Navbar({navs}) {
       <header className="relative flex flex-wrap items-center justify-between px-4 mb-3 md:px-24">
         <div className="container flex flex-row items-center justify-between">
           <div className=" relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
-            <NavLink end to="/home" className="text-sm font-bold flex items-center leading-relaxed whitespace-nowrap uppercase text-white"
+            <NavLink end to="/" className="text-sm font-bold flex items-center leading-relaxed whitespace-nowrap uppercase text-white"
                 >
                 <img
                   src="./images/logogabung.png" alt=""
@@ -23,13 +24,19 @@ export default function Navbar({navs}) {
             </NavLink>
           </div>
             <div className="flex flex-row items-center justify-between " >
-                <button
+                {isAdmin ? <button
                   className="text-white ml-16 cursor-pointer text-xl leading-none px-2 py-1 md:px-3 md:py-2 my-4 rounded bg-blue-500 block outline-none focus:outline-none"
                   type="button"
                   onClick={() => setNavbarOpen(!navbarOpen)}
                 >
                   <AiOutlineMenu className="lg:w-8 lg:h-8"/>
                 </button>
+                : <NavLink end to="/login" onClick={()=> ProgressIdb.deleteToken()}
+                className="flex flex-col justify-center items-center"
+                  >
+                      <HiOutlineLogout className="text-blue-500 text-2xl lg:text-3xl" />
+                      <span className="text-blue-500 font-normal">Logout</span>
+                </NavLink>}
             </div>
           <nav
             className={
@@ -57,7 +64,7 @@ export default function Navbar({navs}) {
             </li>
             ))}
               <li className="nav-item">
-                <NavLink end to="/login"
+                <NavLink end to="/login" onClick={()=> ProgressIdb.deleteToken()}
                 className="flex flex-col justify-center items-center"
                   >
                       <HiOutlineLogout className="text-white text-2xl lg:text-3xl" />
